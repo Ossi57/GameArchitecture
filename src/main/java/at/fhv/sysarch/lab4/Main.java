@@ -1,7 +1,6 @@
 package at.fhv.sysarch.lab4;
 
 import at.fhv.sysarch.lab4.game.Game;
-import at.fhv.sysarch.lab4.physics.Physic;
 import at.fhv.sysarch.lab4.physics.PhysicsEngine;
 import at.fhv.sysarch.lab4.rendering.Renderer;
 import javafx.application.Application;
@@ -25,9 +24,12 @@ public class Main extends Application {
             c.getGraphicsContext2D(),
             SCENE_WIDTH, 
             SCENE_HEIGHT);
-        Physic physic = new Physic();
+        PhysicsEngine physic = new PhysicsEngine();
         renderer.setFrameListener(physic);
         Game game = new Game(renderer, physic);
+        physic.setBallPocketedListener(game);
+        physic.setBallsCollisionListener(game);
+        physic.setObjectsRestListener(game);
 
         c.setOnMousePressed(game::onMousePressed);
         c.setOnMouseReleased(game::onMouseReleased);
