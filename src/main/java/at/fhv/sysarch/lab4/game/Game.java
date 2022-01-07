@@ -84,15 +84,16 @@ public class Game implements BallsCollisionListener, BallPocketedListener, Objec
         Vector2 directionEnd = renderer.getCueEndPoints();
         Vector2 direction = new Vector2(renderer.screenToPhysicsX(directionEnd.x), renderer.screenToPhysicsY(directionEnd.y)).subtract(origin).multiply(-1);
 
-        //set balls in motion
-        Optional<Ball> hitBallOpt = physic.performStrike(origin, direction);
-
-        //check if a non-white ball was hit
-        hitBallOpt.ifPresent(
-                hitBall -> {
-                    nonWhiteBallStroken = !hitBall.isWhite();
-                }
-        );
+        //set balls in motion (only if direction is no zero vector -> vector is zero if double click into same position)
+        if(!direction.isZero()) {
+            Optional<Ball> hitBallOpt = physic.performStrike(origin, direction);
+            //check if a non-white ball was hit
+            hitBallOpt.ifPresent(
+                    hitBall -> {
+                        nonWhiteBallStroken = !hitBall.isWhite();
+                    }
+            );
+        }
     }
 
 
@@ -271,6 +272,10 @@ public class Game implements BallsCollisionListener, BallPocketedListener, Objec
         nonWhiteBallLeft.ifPresent(balls::remove);
         placeBalls(balls, true);
         perforatedBalls = new HashSet<>();
+
+        //set respawnBall to false as white ball resets anyway
+        if(respawnBall)
+            respawnBall = false;
     }
 
     private void announceFoul(String msg) {
