@@ -24,6 +24,8 @@ public class Renderer extends AnimationTimer {
     private List<Ball> balls;
     private Table table;
 
+    private boolean isCueActive = false;
+
     private final GraphicsContext gc;
 
     private final double centerX;
@@ -227,8 +229,45 @@ public class Renderer extends AnimationTimer {
         }
     }
 
+
+    public void deactivateCue(){
+        isCueActive = false;
+    }
+
+    public void activateCue(){
+        isCueActive = true;
+    }
+
+    public Vector2 getCueStartPoints(){
+        return new Vector2(cueStartX, cueStartY);
+    }
+
+    public Vector2 getCueEndPoints(){
+        return new Vector2(cueEndX, cueEndY);
+    }
+
+    public void setCueStartPoints(double x, double y){
+        cueStartX = x;
+        cueStartY = y;
+    }
+
+    public void setCueEndPoints(double x, double y){
+        cueEndX = x;
+        cueEndY = y;
+    }
+
+    private double cueStartX;
+    private double cueStartY;
+    private double cueEndX;
+    private double cueEndY;
+
     private void drawCue() {
+        this.gc.setTransform(this.jfxCoords);
         // TODO: draw cue
+        this.gc.setLineWidth(2);
+        if(isCueActive){
+            this.gc.strokeLine(cueStartX, cueStartY, cueEndX, cueEndY);
+        }
     }
 
     private void drawFPS(double dt) {
